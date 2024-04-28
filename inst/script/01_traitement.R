@@ -91,9 +91,13 @@ data_consommation_departement=data_consommation %>%
 
 # Préparation de la table finale ------------------------------------------
 
-#Jointure entre la table consoammation et production
+#Jointure entre la table consommation et production
 
 data_conso_prod_dep=data_consommation_departement %>%
   inner_join(data_production_dep,by=c("Annee"="annee","Code_Departement"="code_departement")) %>%
-  mutate(Prod_totale=rowSums(across(starts_with("energie_produite_annuelle")),na.rm=TRUE)) %>%
-  mutate_if(is.numeric,replace_na,0)
+  mutate(Prod_totale_mwh=rowSums(across(starts_with("energie_produite_annuelle")),na.rm=TRUE)) %>%
+  mutate_if(is.numeric,replace_na,0) %>%
+  select(-nom_departement ,-nom_region) %>%
+  left_join(departements %>% select(DEP,NOM_DEP),by=c("Code_Departement"="DEP"))%>%
+  left_join(regions%>% select(REG,NOM_REG),by=c("code_region"="REG")) %>%
+  mutate(ratio_conso_prod=Conso_totale_MWh/(Prod_totale_mwh))

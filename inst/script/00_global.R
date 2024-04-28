@@ -19,7 +19,8 @@
 # install.packages("usethis")
 # install.packages("remotes")
 # install.packages("devtools")
-
+# devtools::install_github("insafmahdoui/Enedis")
+# devtools::install_github("MaelTheuliere/COGiter")
 
 # Chemin dossier ----------------------------------------------------------
 
@@ -27,8 +28,13 @@ data_source=paste0("inst/data_source/")
 
 # Packages ----------------------------------------------------------------
 
-library(httr2)
-library(tidyverse)
-library(httr)
+library(tidyverse) #traitement de données
+library(httr2) #Requete via Api
+library(COGiter) #gère les référentiels de géographie
+library(Enedis)
+
 devtools::load_all()
 
+# charger les tables département et région pour corriger les noms départements/régions
+data("departements")
+data("regions")
