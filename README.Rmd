@@ -1,0 +1,42 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# Enedis
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Explorer les données open source d'Enedis
+
+## Installation
+
+
+``` r
+# install.packages("devtools")
+devtools::install_github("insafmahdoui/Enedis")
+```
+
+## Example
+
+
+```{r example, warning=FALSE,message=FALSE}
+library(httr2)
+library(tidyverse)
+library(httr)
+library(Enedis)
+
+get_info_dataset(url="https://data.enedis.fr/api/explore/v2.1/catalog/",data_id="production-electrique-par-filiere-a-la-maille-departement")
+```
+

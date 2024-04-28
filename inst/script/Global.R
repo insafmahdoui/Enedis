@@ -33,12 +33,18 @@ devtools::load_all()
 
 data_id="production-electrique-par-filiere-a-la-maille-departement"
 
-info_dataset=get_info_dataset(data_id="production-electrique-par-filiere-a-la-maille-departement")
+info_dataset=get_info_dataset(data_id=data_id)
 
 # formater la table production-electrique
 
-data_res=get_row_dataset_api_enedis(data_id="production-electrique-par-filiere-a-la-maille-departement",nb_ligne=info_dataset$nb_ligne) %>% map_dfr(~tibble(annee=pluck(.x,"annee"),
-                                nom_departement=pluck(.x,"nom_departement"),
+#colonnes=info_dataset$nom_colonnes[-c(19:20)]
+
+#glue::glue('{colonnes}=pluck(.x,"{colonnes}"),')
+
+
+data_departement=get_row_dataset_api_enedis(data_id=data_id,nb_ligne=info_dataset$nb_ligne) %>%
+  map_dfr(~tibble(annee=pluck(.x,"annee"),
+                              nom_departement=pluck(.x,"nom_departement"),
                                 code_departement=pluck(.x,"code_departement"),
                                 nom_region=pluck(.x,"nom_region"),
                                 code_region=pluck(.x,"code_region"),
