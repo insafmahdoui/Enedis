@@ -1,4 +1,4 @@
-
+library(Enedis)
 
 ui <- page_navbar(tags$head(tags$style(HTML(".shiny-output-error {
                                             display: none !important;
