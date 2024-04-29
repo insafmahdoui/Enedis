@@ -49,3 +49,13 @@ get_info_dataset(url="https://data.enedis.fr/api/explore/v2.1/catalog/",data_id=
 #> [19] "geom"                                                
 #> [20] "geo_point_2d"
 ```
+
+## Webapp Production et consommation d’électricité
+
+``` r
+library(Enedis)
+
+run_app()
+```
+
+![](https://raw.githubusercontent.com/insafmahdoui/Enedis/main/inst/webapp/exemple.PNG)

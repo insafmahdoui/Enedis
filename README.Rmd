@@ -40,3 +40,16 @@ library(Enedis)
 get_info_dataset(url="https://data.enedis.fr/api/explore/v2.1/catalog/",data_id="production-electrique-par-filiere-a-la-maille-departement")
 ```
 
+
+## Webapp Production et consommation d'électricité 
+
+
+```{r eval=FALSE, warning=FALSE,message=FALSE}
+library(Enedis)
+
+run_app()
+
+```
+
+![](https://raw.githubusercontent.com/insafmahdoui/Enedis/main/inst/webapp/exemple.PNG)
+
