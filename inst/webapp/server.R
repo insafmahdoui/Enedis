@@ -1,9 +1,9 @@
 library(Enedis)
 
-server <- function(input, output) {
+server <- function(input, output,session) {
 
-  observe({
-    if (input$close > 0) stopApp()                             # stop shiny
+  session$onSessionEnded(function() {
+    stopApp()
   })
 
   Annee_comparaison <- reactiveVal(0)
