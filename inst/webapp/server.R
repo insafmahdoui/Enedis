@@ -2,6 +2,10 @@ library(Enedis)
 
 server <- function(input, output) {
 
+  observe({
+    if (input$close > 0) stopApp()                             # stop shiny
+  })
+
   Annee_comparaison <- reactiveVal(0)
 
 output$region <- renderUI({
