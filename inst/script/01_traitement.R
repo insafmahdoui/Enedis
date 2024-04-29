@@ -1,11 +1,9 @@
-#####################################################
-# Nom script: Global.R
+# Informations script -----------------------------------------------------
+
+# Nom script: 01_traitement.R
 # Auteur: Insaf Mahdoui
 # Objectif: Préparation des données pour l'analyse
 # Date mise à jour: 28/04/2024
-#####################################################
-
-
 
 
 # Préparation données Production electrique par departement-------------------------------------------
@@ -49,19 +47,22 @@ data_production=get_row_dataset_api_enedis(data_id=data_id,nb_ligne=info_dataset
 #data_production %>% count(annee)
 
 
+
+
 data_production_dep=data_production %>% group_by(annee,nom_departement,code_departement,nom_region,code_region) %>%
   summarise_if(is.numeric,sum) %>% ungroup() %>%
   mutate(annee=as.numeric(annee))
 
 #data_production_dep %>% count(annee)
 
-
+names(data_production_dep)[-c(1:5)]=paste0("Production_",names(data_production_dep)[-c(1:5)])
 
 # Préparation Données consoammation electrique par departement---------------------------------------------------
 
 
 
 data_consommation0=data.table::fread(paste0(data_source,"consommation-annuelle-d-electricite-et-gaz-par-departement@agenceore.csv")) %>%
+  filter(toupper(OPERATEUR)=="ENEDIS") %>%
   select("Année","Code Département","Nom Département","CODE CATEGORIE CONSOMMATION","Nb sites", "Conso totale (MWh)","Conso moyenne (MWh)")
 
 names(data_consommation0)=c("Annee","Code_Departement","Nom_Departement","CODE_CATEGORIE_CONSOMMATION","Nb_sites", "Conso_totale_MWh","Conso_moyenne_MWh")
@@ -75,29 +76,36 @@ data_consommation=data_consommation0 %>%
                                   Code_Departement)) %>%
   filter(Code_Departement!="20")
 
-data_consommation_departement_categ=data_consommation %>%
+data_consommation_dep=data_consommation %>%
   group_by(Annee,Code_Departement,CODE_CATEGORIE_CONSOMMATION) %>%
-  summarise(Conso_totale_MWh=sum(Conso_totale_MWh,na.rm=TRUE),
+  summarise(totale_MWh=sum(Conso_totale_MWh,na.rm=TRUE),
             Nb_sites=sum(Nb_sites,na.rm=TRUE)) %>% ungroup() %>%
-  mutate(Conso_moyenne_MWh=Conso_totale_MWh/Nb_sites)
+  pivot_wider(id_cols =c("Annee","Code_Departement"),names_from=CODE_CATEGORIE_CONSOMMATION ,
+              values_from=c(totale_MWh,Nb_sites),
+              names_glue = "Consommation_{.value}_{CODE_CATEGORIE_CONSOMMATION}", values_fill = 0  ) %>%
+  mutate(Consommation_totale_MWh=rowSums(across(starts_with("Consommation_totale_MWh")),na.rm=TRUE),
+         Consommation_Nb_sites_totale=rowSums(across(starts_with("Consommation_Nb_sites")),na.rm=TRUE))
 
-data_consommation_departement=data_consommation %>%
-  group_by(Annee,Code_Departement) %>%
-  summarise(Conso_totale_MWh=sum(Conso_totale_MWh,na.rm=TRUE),
-            Nb_sites=sum(Nb_sites,na.rm=TRUE)) %>% ungroup()%>%
-  mutate(Conso_moyenne_MWh=Conso_totale_MWh/Nb_sites)
 
+names(data_consommation_dep)
 
 
 # Préparation de la table finale ------------------------------------------
 
 #Jointure entre la table consommation et production
 
-data_conso_prod_dep=data_consommation_departement %>%
+data_conso_prod_dep=data_consommation_dep %>%
   inner_join(data_production_dep,by=c("Annee"="annee","Code_Departement"="code_departement")) %>%
-  mutate(Prod_totale_mwh=rowSums(across(starts_with("energie_produite_annuelle")),na.rm=TRUE)) %>%
+  mutate(Production_totale_mwh=rowSums(across(starts_with("Production_energie_produite_annuelle")),na.rm=TRUE),
+         Production_nb_sites_totale=rowSums(across(starts_with("Production_nb_sites")),na.rm=TRUE)) %>%
   mutate_if(is.numeric,replace_na,0) %>%
   select(-nom_departement ,-nom_region) %>%
   left_join(departements %>% select(DEP,NOM_DEP),by=c("Code_Departement"="DEP"))%>%
-  left_join(regions%>% select(REG,NOM_REG),by=c("code_region"="REG")) %>%
-  mutate(ratio_conso_prod=Conso_totale_MWh/(Prod_totale_mwh))
+  left_join(regions%>% select(REG,NOM_REG),by=c("code_region"="REG"))%>%
+  select(Annee,Code_Departement,NOM_DEP,code_region,NOM_REG,starts_with("Production"),starts_with("Consommation"))
+
+
+
+saveRDS(data_conso_prod_dep,paste0(data_save,"data_conso_prod_dep.rds"))
+rm(list=ls())
+

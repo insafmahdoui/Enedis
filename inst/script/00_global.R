@@ -1,9 +1,10 @@
-#####################################################
-# Nom script: Global.R
+# Informations script -----------------------------------------------------
+
+# Nom script: 00_global.R
 # Auteur: Insaf Mahdoui
-# Objectif: installer des packages et faire des tests
+# Objectif: Paramètrage et lancement du workflow de traitement de données
 # Date mise à jour: 28/04/2024
-#####################################################
+
 
 
 
@@ -21,20 +22,30 @@
 # install.packages("devtools")
 # devtools::install_github("insafmahdoui/Enedis")
 # devtools::install_github("MaelTheuliere/COGiter")
+# install.packages("shinyWidgets")
+# install.packages("bsicons")
+
 
 # Chemin dossier ----------------------------------------------------------
 
-data_source=paste0("inst/data_source/")
 
+data_source=paste0("inst/data_source/")
+data_save=paste0("inst/webapp/www/data_save/")
+script=paste0("inst/script/")
 # Packages ----------------------------------------------------------------
 
 library(tidyverse) #traitement de données
 library(httr2) #Requete via Api
 library(COGiter) #gère les référentiels de géographie
-library(Enedis)
+#library(Enedis)
 
 devtools::load_all()
 
 # charger les tables département et région pour corriger les noms départements/régions
 data("departements")
 data("regions")
+
+
+# Lancer traitement de données --------------------------------------------
+
+source(paste0(script,"01_traitement.R"))
