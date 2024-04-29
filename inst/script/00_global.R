@@ -42,9 +42,9 @@ library(httr2) #Requete via Api
 library(COGiter) #gère les référentiels de géographie
 library(sf)
 library(leaflet)
-#library(Enedis)
+library(Enedis)
 
-devtools::load_all()
+#devtools::load_all()
 
 # charger les tables département et région pour corriger les noms départements/régions
 data("departements")

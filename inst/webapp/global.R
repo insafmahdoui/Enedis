@@ -19,9 +19,10 @@ library(scales)
 library(bsicons)
 library(plotly)
 library(tidyverse) #traitement de données
-#library(Enedis)
-
-devtools::load_all()
+library(Enedis)
+library(leaflet)
+library(COGiter)
+library(sf)
 
 
 
