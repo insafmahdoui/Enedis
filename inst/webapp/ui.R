@@ -31,7 +31,8 @@ ui <- page_navbar(tags$head(tags$style(HTML(".shiny-output-error {
   ))),
   nav_panel("Vue d'ensemble",
   layout_columns(uiOutput("prod_conso_tot"),uiOutput("nb_site"),uiOutput("prod_conso_moy")),
-  layout_columns(card(plotlyOutput("prod_conso_filiere", height = "90vh")),card("Map"), height = 800)
+  layout_columns(card(card_header(textOutput("titre_treemap")),plotlyOutput("prod_conso_filiere", height = "90vh")),
+                 card(card_header(textOutput("titre_map")),leafletOutput("map")), height = 800)
   ),
   nav_panel("Evolution",
             card(

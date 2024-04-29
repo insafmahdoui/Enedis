@@ -24,7 +24,10 @@
 # devtools::install_github("MaelTheuliere/COGiter")
 # install.packages("shinyWidgets")
 # install.packages("bsicons")
-
+# install.packages("leaflet")
+# devtools::install_github("pascalirz/tod")
+# install.packages("sf")
+# install.packages("rgdal")
 
 # Chemin dossier ----------------------------------------------------------
 
@@ -37,6 +40,8 @@ script=paste0("inst/script/")
 library(tidyverse) #traitement de données
 library(httr2) #Requete via Api
 library(COGiter) #gère les référentiels de géographie
+library(sf)
+library(leaflet)
 #library(Enedis)
 
 devtools::load_all()
@@ -45,7 +50,15 @@ devtools::load_all()
 data("departements")
 data("regions")
 
+pal <- colorNumeric(scales::seq_gradient_pal(low = "yellow", high = "red",
+                                             space = "Lab"), domain = as.numeric(dpt2$DEP))
 
+dpt2 <- st_transform(COGiter::departements_geo, crs = 4326)
+
+m <- leaflet() %>% addTiles() %>%
+  addPolygons(data = dpt2,color=~pal(as.numeric(dpt2$DEP)),fillOpacity = 0.6,
+              stroke = TRUE,weight=1)
+m
 # Lancer traitement de données --------------------------------------------
 
 source(paste0(script,"01_traitement.R"))

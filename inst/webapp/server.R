@@ -39,6 +39,26 @@ observe({
 
 })
 
+
+data_map <- reactive({
+
+
+
+  data_map=data_conso_prod %>% filter(Annee==input$annee) %>%
+    select(Annee,Code_Departement,NOM_DEP,code_region,NOM_REG,maille,starts_with(input$type))
+
+  if(input$maille=="Nationale"){
+
+    data_map %>% filter(maille=="Région")
+
+  }else if(input$maille=="Région"){
+    data_map %>% filter(NOM_REG==input$region,maille=="Département")
+  }else{
+    data_map%>% filter(NOM_DEP==input$departement,maille=="Département")
+
+  }
+})
+
 data_vue_N <- reactive({
 
 
@@ -57,6 +77,8 @@ data_vue_N <- reactive({
 
   }
 })
+
+
 
 data_vue_N1 <- reactive({
 
@@ -181,9 +203,69 @@ output$prod_conso_moy <- renderUI({
 
 output$prod_conso_filiere <- renderPlotly({
 
-  titre=if_else(input$type=="Production","Production par filière","Consommation par catégorie")
 
-  add_treemap(data_filiere(),titre)
+
+  add_treemap(data_filiere())
+
+})
+
+
+output$titre_map <- renderText({
+
+
+    if(input$maille=="Nationale"){
+
+      paste0(input$type," par région")
+
+    }else if(input$maille=="Région"){
+
+      paste0(input$type," par départment")
+
+    }else{
+      input$type
+      }
+
+
+
+})
+
+output$titre_treemap <- renderText({
+
+
+  if_else(input$type=="Production","Production par filière","Consommation par catégorie")
+
+
+
+})
+
+output$map <- renderLeaflet({
+
+  if(input$type=="Production"){
+    type="Production"
+
+  if(input$maille=="Nationale"){
+
+    add_map(data_map(),Production_totale_mwh,NOM_REG,countour="reg",type)
+
+  }else{
+
+    add_map(data_map(),Production_totale_mwh,NOM_DEP,countour="dep",type)
+
+  }
+  }else{
+
+    type="Consommation"
+    if(input$maille=="Nationale"){
+
+      add_map(data_map(),Consommation_totale_MWh,NOM_REG,countour="reg",type)
+
+    }else{
+
+      add_map(data_map(),Consommation_totale_MWh,NOM_DEP,countour="dep",type)
+
+    }
+
+  }
 
 })
 

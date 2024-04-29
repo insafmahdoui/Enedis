@@ -1,4 +1,4 @@
-add_treemap <- function(data,title_lb="") {
+add_treemap <- function(data) {
 
 
 
@@ -19,8 +19,7 @@ add_treemap <- function(data,title_lb="") {
     text =paste0(data$type,": ",format(round(data$value/1000,1),big.mark=" ")," Twh",'<br>',
                           "%",data$type,": ",round(100*data$pct),"%",'<br>'),
     hovertemplate =paste0(data$type," ",data$label,": ",format(round(data$value/1000,1),big.mark=" ")," Twh",'<br>',
-      "%",data$type,": ",round(100*data$pct),"%",'<br><extra></extra>'))%>%
-    layout(title=title_lb)
+      "%",data$type,": ",round(100*data$pct),"%",'<br><extra></extra>'))
   fig
 }
 
