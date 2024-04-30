@@ -50,15 +50,7 @@ library(Enedis)
 data("departements")
 data("regions")
 
-pal <- colorNumeric(scales::seq_gradient_pal(low = "yellow", high = "red",
-                                             space = "Lab"), domain = as.numeric(dpt2$DEP))
 
-dpt2 <- st_transform(COGiter::departements_geo, crs = 4326)
-
-m <- leaflet() %>% addTiles() %>%
-  addPolygons(data = dpt2,color=~pal(as.numeric(dpt2$DEP)),fillOpacity = 0.6,
-              stroke = TRUE,weight=1)
-m
 # Lancer traitement de données --------------------------------------------
 
 source(paste0(script,"01_traitement.R"))
