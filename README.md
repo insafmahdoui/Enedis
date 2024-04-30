@@ -3,9 +3,6 @@
 
 # Enedis
 
-<!-- badges: start -->
-<!-- badges: end -->
-
 Explorer les données open source d’Enedis
 
 ## Installation
