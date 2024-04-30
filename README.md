@@ -58,6 +58,7 @@ library(Enedis)
 run_app()
 ```
 
-[lien vers la webapp](https://insaf.shinyapps.io/Enedis/)
+<a href="https://insaf.shinyapps.io/Enedis/" target="_blank">lien vers
+la webapp</a>
 
 ![](https://raw.githubusercontent.com/insafmahdoui/Enedis/main/inst/webapp/exemple.PNG)

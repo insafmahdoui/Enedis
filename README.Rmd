@@ -51,7 +51,7 @@ run_app()
 
 ```
 
-[lien vers la webapp](https://insaf.shinyapps.io/Enedis/)
+[lien vers la webapp](https://insaf.shinyapps.io/Enedis/){target="_blank"}
 
 ![](https://raw.githubusercontent.com/insafmahdoui/Enedis/main/inst/webapp/exemple.PNG)
 
